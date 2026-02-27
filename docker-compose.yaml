@@ -1,0 +1,42 @@
+services:
+  husky_dev:
+    build: .
+    image: clearpath-dev:latest
+    tty: true
+    stdin_open: true
+
+    network_mode: "host"
+    ipc: "host"
+    pid: "host"
+
+    security_opt:
+      - "seccomp:unconfined"
+      - "apparmor:unconfined"
+    cap_add:
+      - "SYS_PTRACE"
+
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
+      - DISPLAY
+      - XAUTHORITY=/home/ros/.Xauthority
+      
+      - __GLX_VENDOR_LIBRARY_NAME=nvidia
+      - __NV_PRIME_RENDER_OFFLOAD=1
+
+      - QT_X11_NO_MITSHM=1
+
+    volumes:
+      - .:/workspace/husky-sim
+      
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/home/ros/.Xauthority:ro
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu, utility, compute, video, graphics]
