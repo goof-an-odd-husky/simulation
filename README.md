@@ -31,6 +31,8 @@ When you download an .sdf world, under sdf/world/ add:
     </spherical_coordinates>
 ```
 
+Put the .sdf world in the root of this repository (at least for now it works this way)
+
 
 # Foxglove
 
