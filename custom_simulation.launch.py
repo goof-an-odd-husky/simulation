@@ -111,22 +111,56 @@ def generate_launch_description():
         launch_arguments=[("world", LaunchConfiguration("world"))],
     )
 
-    custom_ekf = Node(
+    ekf_config_path = "/workspace/husky-sim/husky_config/custom_ekf.yaml"
+    ekf_local = Node(
         package="robot_localization",
         executable="ekf_node",
-        name="ekf_node",
+        name="ekf_node_local",
         namespace="husky",
         output="screen",
-        parameters=["/workspace/husky-sim/husky_config/custom_ekf.yaml"],
-        remappings=[("odometry/filtered", "platform/odom/filtered")],
+        parameters=[ekf_config_path],
+        remappings=[("odometry/filtered", "odometry/local")],
+    )
+    ekf_global = Node(
+        package="robot_localization",
+        executable="ekf_node",
+        name="ekf_node_global",
+        namespace="husky",
+        output="screen",
+        parameters=[ekf_config_path],
+        remappings=[("odometry/filtered", "odometry/global")],
+    )
+    navsat_transform = Node(
+        package="robot_localization",
+        executable="navsat_transform_node",
+        name="navsat_transform",
+        namespace="husky",
+        output="screen",
+        parameters=[ekf_config_path],
+        remappings=[
+            ("imu", "sensors/imu_0/data"),
+            (
+                "gps/fix",
+                "sensors/gps_0/fix",
+            ),
+            ("odometry/filtered", "odometry/global"),
+            ("odometry/gps", "odometry/gps"),
+        ],
     )
 
-    tf_fix = Node(
+    tf_fix_imu = Node(
         package="tf2_ros",
         executable="static_transform_publisher",
         name="imu_tf_fix",
         output="screen",
         arguments=["0", "0", "0", "0", "0", "0", "husky/base_link", "imu_0_link"],
+    )
+    tf_fix_gps = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        name="gps_tf_fix",
+        output="screen",
+        arguments=["0", "0", "0", "0", "0", "0", "husky/base_link", "gps_0_link"],
     )
 
     ld = LaunchDescription()
@@ -141,7 +175,10 @@ def generate_launch_description():
 
     ld.add_action(gz_sim)
     ld.add_action(OpaqueFunction(function=robot_spawn_calculation))
-    ld.add_action(tf_fix)
-    ld.add_action(custom_ekf)
+    ld.add_action(tf_fix_imu)
+    ld.add_action(tf_fix_gps)
+    ld.add_action(ekf_local)
+    ld.add_action(ekf_global)
+    ld.add_action(navsat_transform)
 
     return ld

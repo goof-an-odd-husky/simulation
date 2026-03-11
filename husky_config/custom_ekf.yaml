@@ -1,4 +1,4 @@
-/**/ekf_node:
+/**/ekf_node_local:
   ros__parameters:
     use_sim_time: true
     frequency: 50.0
@@ -16,7 +16,6 @@
                    false, false, true,
                    false, false, false]
     odom0_differential: false
-    odom0_queue_size: 10
 
     imu0: sensors/imu_0/data
     imu0_config: [false, false, false,
@@ -25,10 +24,42 @@
                   true,  true,  true,
                   true,  true,  false]
     imu0_differential: false
-    imu0_queue_size: 10
     imu0_remove_gravitational_acceleration: true
 
-    subscribe_to_updates: true
-    imu0_qos_history: 1
-    imu0_qos_reliability: 2
-    imu0_qos_durability: 2
+/**/ekf_node_global:
+  ros__parameters:
+    use_sim_time: true
+    frequency: 50.0
+    two_d_mode: true
+    publish_tf: true 
+    
+    map_frame: husky/map
+    odom_frame: husky/odom
+    base_link_frame: husky/base_link
+    world_frame: husky/map
+
+    odom0: platform/odom
+    odom0_config: [false, false, false, false, false, false, true, true, false, false, false, true, false, false, false]
+    
+    imu0: sensors/imu_0/data
+    imu0_config: [false, false, false, true, true, true, false, false, false, true, true, true, true, true, false]
+    imu0_remove_gravitational_acceleration: true
+
+    odom1: odometry/gps
+    odom1_config: [true,  true,  false,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false]
+
+/**/navsat_transform:
+  ros__parameters:
+    use_sim_time: true
+    frequency: 30.0
+    delay: 3.0
+    magnetic_declination_radians: 0.0 # Not needed in Gazebo
+    yaw_offset: 0.0 # World and spawn are currently headed 0.0
+    zero_altitude: true
+    broadcast_cartesian_transform: false
+    publish_filtered_gps: true
+    use_odometry_yaw: false
