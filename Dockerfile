@@ -53,9 +53,6 @@ RUN wget \
     && apt-get install -y --no-install-recommends \
     ros-jazzy-clearpath-desktop ros-jazzy-clearpath-simulator
 
-ENV PIP_BREAK_SYSTEM_PACKAGES=1
-RUN pip3 install pyceres pyqtgraph
-
 RUN apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
