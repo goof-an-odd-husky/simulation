@@ -19,14 +19,23 @@ Works only with the custom script
 When you download an .sdf world, under sdf/world/ add:
 
 ```sdf
+    <plugin filename="libgz-sim-physics-system.so" name="gz::sim::systems::Physics"/>
+    <plugin filename="libgz-sim-user-commands-system.so" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="libgz-sim-scene-broadcaster-system.so" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin
+      filename="ignition-gazebo-sensors-system"
+      name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
     <plugin name="gz::sim::systems::Imu" filename="libgz-sim-imu-system.so"/>
     <plugin name="gz::sim::systems::NavSat" filename="libgz-sim-navsat-system.so"/>
     <spherical_coordinates>
       <surface_model>EARTH_WGS84</surface_model>
       <world_frame_orientation>ENU</world_frame_orientation>
-      <latitude_deg>-22.986687</latitude_deg>
-      <longitude_deg>-43.202501</longitude_deg>
-      <elevation>35</elevation>
+      <latitude_deg>49.820517251129985</latitude_deg>
+      <longitude_deg>24.02485719952034</longitude_deg>
+      <elevation>339.40000000000146</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
 ```
