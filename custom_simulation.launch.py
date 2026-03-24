@@ -1,3 +1,4 @@
+import os
 import math
 from launch import LaunchDescription
 from launch.actions import (
@@ -62,6 +63,8 @@ def robot_spawn_calculation(context, *args, **kwargs):
 def generate_launch_description():
     pkg_clearpath_gz = FindPackageShare("clearpath_gz")
 
+    current_prefix = os.environ.get('AMENT_PREFIX_PATH', '')
+    os.environ['AMENT_PREFIX_PATH'] = f'/workspace:{current_prefix}'
     arg_world = DeclareLaunchArgument(
         "world",
         default_value="warehouse",

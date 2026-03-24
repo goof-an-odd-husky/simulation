@@ -28,6 +28,7 @@ services:
 
     volumes:
       - .:/workspace/husky-sim
+      - ../worlds:/workspace/share
       
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       
