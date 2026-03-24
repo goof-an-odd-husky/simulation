@@ -40,7 +40,7 @@ When you download an .sdf world, under sdf/world/ add:
     </spherical_coordinates>
 ```
 
-Put the .sdf world in the root of this repository (at least for now it works this way)
+Put the .sdf world in the `../worlds` (or in another place; then change the mount in `docker-compose.yaml`).
 
 If you want to change the spawn of Husky, use the `world:=sonoma origin:=-22.986687,-43.202501,35.0 spawn:=-22.98787540402462,-43.19982241436838,38.107444597408175` parameters.
 - You can get the `origin` from the sdf file at sdf/world/spherical_coordinates
