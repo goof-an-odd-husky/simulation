@@ -2,12 +2,12 @@
 
 # ros2 run clearpath_generator_common generate_bash -s $WORKSPACE_PATH
 # Note: never split build into several calls!
-cd $WORKSPACE_PATH
+cd ros2_ws
 
 BUILD_TYPE=RelWithDebInfo
 
+rosdep install --from-paths src --ignore-src -r -y
 colcon build \
-  --allow-overriding \
   --symlink-install \
   --cmake-args \
     "-DCMAKE_BUILD_TYPE=$BUILD_TYPE" \
@@ -15,7 +15,6 @@ colcon build \
   -Wall \
   -Wextra \
   -Wpedantic 
-  # --merge-install \ # Good to have, but ignoring for now, we indeed will have conflicting names
 
 
 echo "Build finished, Source the 'ros2_ws/setup.bash' now"

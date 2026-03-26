@@ -14,7 +14,7 @@ update_bashrc_entry export "WORKSPACE_PATH" "${WORKSPACE_PATH}"
 update_bashrc_entry export "ROS_SYSTEM_SETUP" "/opt/ros/${ROS_DISTRO}/setup.bash"
 update_bashrc_entry source ROS_SYSTEM_SETUP
 
-update_bashrc_entry export "ROS_WORKSPACE_SOURCE" "${WORKSPACE_PATH}/setup.bash"
+update_bashrc_entry export "ROS_WORKSPACE_SOURCE" "${WORKSPACE_PATH}/install/setup.bash"
 update_bashrc_entry source ROS_WORKSPACE_SOURCE
 
 source ~/.bashrc
