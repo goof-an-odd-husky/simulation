@@ -6,7 +6,7 @@ Custom simulation script:
 ros2 launch custom_simulation.launch.py setup_path:=/workspace/husky-sim/husky_config slam:=false nav2:=true
 ```
 
-And change the Topic to /husky/cmd_vel
+And change the Topic to `/husky/cmd_vel`
 
 # Custom world
 
@@ -14,7 +14,7 @@ And change the Topic to /husky/cmd_vel
 ros2 launch custom_simulation.launch.py setup_path:=/workspace/husky-sim/husky_config slam:=false nav2:=true world:=sonoma z:=35
 ```
 
-Works only with the custom script
+You can also generate a gazebo world of a projection of sattelite images onto elevation map. See https://github.com/saiaravind19/gazebo_terrain_generator. The recommended configuration is Bing Hybrid tiles of 19 depth.
 
 When you download an .sdf world, under sdf/world/ add:
 
@@ -42,8 +42,8 @@ When you download an .sdf world, under sdf/world/ add:
 
 Put the .sdf world in the `../worlds` (or in another place; then change the mount in `docker-compose.yaml`).
 
-If you want to change the spawn of Husky, use the `world:=sonoma origin:=-22.986687,-43.202501,35.0 spawn:=-22.98787540402462,-43.19982241436838,38.107444597408175` parameters.
-- You can get the `origin` from the sdf file at sdf/world/spherical_coordinates
+If you want to change the spawn of Husky, use the `origin:=-22.986687,-43.202501,35.0 spawn:=-22.98787540402462,-43.19982241436838,38.107444597408175` parameters.
+- You can get the `origin` from the sdf file at `sdf/world/spherical_coordinates`
 - `spawn` are the coordinates you want the Husky to be at.
 
 
@@ -52,11 +52,7 @@ If you want to change the spawn of Husky, use the `world:=sonoma origin:=-22.986
 This is a tutorial for setuping Foxglove
 
 1) Run this command to start the bridge
-
-``` bash
-ros2 launch foxglove_bridge foxglove_bridge_launch.xml port:=8888
-```
-
+    - `ros2 launch foxglove_bridge foxglove_bridge_launch.xml port:=8888`
 2) Open Foxglove studio dashboard and choose Open connection
 3) Select Foxglove WebSocket and change port from 8765 to 8888
 4) Launch your gazebo simulation
