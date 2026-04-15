@@ -1,5 +1,7 @@
 *.sdf
 .history/*
+**/config/
+**/launch/
 
 *.html
 
