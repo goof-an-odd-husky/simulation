@@ -1,3 +1,9 @@
+# Setup
+
+```bash
+./init.sh
+```
+
 # Run
 
 Custom simulation script:
