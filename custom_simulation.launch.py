@@ -1,6 +1,6 @@
 import os
 import math
-from launch import LaunchDescription
+from launch import LaunchDescription, actions
 from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
@@ -105,13 +105,35 @@ def generate_launch_description():
         ),
     ]
 
-    gz_sim_launch = PathJoinSubstitution(
-        [pkg_clearpath_gz, "launch", "gz_sim.launch.py"]
-    )
+    # gz_sim_launch = PathJoinSubstitution(
+    #     [pkg_clearpath_gz, "launch", "gz_sim.launch.py"]
+    # )
 
+    # gz_sim = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([gz_sim_launch]),
+    #     launch_arguments=[("world", LaunchConfiguration("world"))],
+    # )
+    pkg_ros_gz_sim = FindPackageShare("ros_gz_sim")
+    packages_paths = [os.path.join(p, 'share') for p in os.getenv('AMENT_PREFIX_PATH', '').split(':')]
+    gz_sim_resource_path = actions.SetEnvironmentVariable(
+        name='GZ_SIM_RESOURCE_PATH',
+        value=[
+            os.path.join(pkg_clearpath_gz.find('clearpath_gz'), 'worlds') + ':',
+            os.path.join(pkg_clearpath_gz.find('clearpath_gz'), 'meshes') + ':',
+            ':' + ':'.join(packages_paths)])
+    gz_sim_launch = PathJoinSubstitution([pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py'])
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([gz_sim_launch]),
-        launch_arguments=[("world", LaunchConfiguration("world"))],
+        launch_arguments=[
+            ('gz_args', [LaunchConfiguration("world"), '.sdf -r -v 4'])
+        ],
+    )
+    clock_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        name='clock_bridge',
+        output='screen',
+        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock']
     )
 
     ekf_config_path = "/workspace/husky-sim/husky_config/custom_ekf.yaml"
@@ -176,7 +198,9 @@ def generate_launch_description():
     for arg in gps_args:
         ld.add_action(arg)
 
+    ld.add_action(gz_sim_resource_path)
     ld.add_action(gz_sim)
+    ld.add_action(clock_bridge)
     ld.add_action(OpaqueFunction(function=robot_spawn_calculation))
     ld.add_action(tf_fix_imu)
     ld.add_action(tf_fix_gps)
