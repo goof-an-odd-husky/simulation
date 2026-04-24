@@ -28,21 +28,110 @@ When you download an .sdf world, under sdf/world/ add:
     <plugin filename="libgz-sim-physics-system.so" name="gz::sim::systems::Physics"/>
     <plugin filename="libgz-sim-user-commands-system.so" name="gz::sim::systems::UserCommands"/>
     <plugin filename="libgz-sim-scene-broadcaster-system.so" name="gz::sim::systems::SceneBroadcaster"/>
-    <plugin
-      filename="ignition-gazebo-sensors-system"
-      name="ignition::gazebo::systems::Sensors">
+    <plugin filename="libgz-sim-sensors-system.so" name="gz::sim::systems::Sensors">
       <render_engine>ogre2</render_engine>
     </plugin>
 
     <plugin name="gz::sim::systems::Imu" filename="libgz-sim-imu-system.so"/>
     <plugin name="gz::sim::systems::NavSat" filename="libgz-sim-navsat-system.so"/>
+
+    <gui fullscreen='0'>
+      <plugin filename="MinimalScene" name="3D View">
+        <gz-gui>
+          <title>3D View</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="string" key="state">docked</property>
+        </gz-gui>
+        <engine>ogre2</engine>
+        <scene>park</scene>
+        <ambient_light>0.4 0.4 0.4</ambient_light>
+        <background_color>0.8 0.8 0.8</background_color>
+        <camera_pose>-241 -603 15 0 0.5 0.7</camera_pose>
+      </plugin>
+      <plugin filename="Teleop" name="Teleop">
+        <gz-gui>
+          <title>Teleop</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="string" key="state">docked</property>
+        </gz-gui>
+      </plugin>
+      <plugin filename="WorldControl" name="World control">
+        <gz-gui>
+          <title>World control</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="bool" key="resizable">false</property>
+          <property type="double" key="height">72</property>
+          <property type="double" key="width">121</property>
+          <property type="double" key="z">1</property>
+          <property type="string" key="state">floating</property>
+          <anchors target="3D View">
+            <line own="left" target="left"/>
+            <line own="bottom" target="bottom"/>
+          </anchors>
+        </gz-gui>
+        <play_pause>1</play_pause>
+        <step>1</step>
+        <start_paused>1</start_paused>
+      </plugin>
+      
+      <plugin filename="WorldStats" name="World stats">
+        <gz-gui>
+          <title>World stats</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="bool" key="resizable">false</property>
+          <property type="double" key="height">110</property>
+          <property type="double" key="width">290</property>
+          <property type="double" key="z">1</property>
+          <property type="string" key="state">floating</property>
+          <anchors target="3D View">
+            <line own="right" target="right"/>
+            <line own="bottom" target="bottom"/>
+          </anchors>
+        </gz-gui>
+        <sim_time>1</sim_time>
+        <real_time>1</real_time>
+        <real_time_factor>1</real_time_factor>
+        <iterations>1</iterations>
+      </plugin>
+      
+      <plugin filename="GzSceneManager" name="Scene Manager">
+        <gz-gui>
+          <property type="string" key="state">floating</property>
+          <property type="double" key="width">0</property>
+          <property type="double" key="height">0</property>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="bool" key="resizable">false</property>
+        </gz-gui>
+      </plugin>
+      
+      <plugin filename="InteractiveViewControl" name="Interactive view control">
+        <gz-gui>
+          <property type="string" key="state">floating</property>
+          <property type="double" key="width">0</property>
+          <property type="double" key="height">0</property>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="bool" key="resizable">false</property>
+        </gz-gui>
+      </plugin>
+      
+      <plugin filename="CameraTracking" name="Camera Tracking">
+        <gz-gui>
+          <property type="string" key="state">floating</property>
+          <property type="double" key="width">0</property>
+          <property type="double" key="height">0</property>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="bool" key="resizable">false</property>
+        </gz-gui>
+      </plugin>
+      <plugin filename="ComponentInspector" name="Component inspector"/>
+      <plugin filename="EntityTree" name="Entity tree"/>
+    </gui>
+
     <spherical_coordinates>
       <surface_model>EARTH_WGS84</surface_model>
-      <world_frame_orientation>ENU</world_frame_orientation>
-      <latitude_deg>49.820517251129985</latitude_deg>
-      <longitude_deg>24.02485719952034</longitude_deg>
-      <elevation>339.40000000000146</elevation>
-      <heading_deg>0</heading_deg>
+      <latitude_deg>49.82358736969999</latitude_deg>
+      <longitude_deg>24.027099609375</longitude_deg>
+      <elevation>332.40000000000146</elevation>
     </spherical_coordinates>
 ```
 
