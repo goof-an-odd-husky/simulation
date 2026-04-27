@@ -1,0 +1,95 @@
+controller_server:
+  ros__parameters:
+    use_sim_time: true
+    transform_tolerance: 1.0
+    controller_frequency: 10.0
+    min_x_velocity_threshold: 0.001
+    min_y_velocity_threshold: 0.5
+    min_theta_velocity_threshold: 0.001
+    failure_tolerance: 0.3
+    progress_checker_plugin: "progress_checker"
+    goal_checker_plugins: ["general_goal_checker"]
+    controller_plugins: ["FollowPath"]
+
+    FollowPath:
+      plugin: "dwb_core::DWBLocalPlanner"
+      debug_trajectory_details: true
+      min_vel_x: 0.0
+      max_vel_x: 0.5
+      max_vel_theta: 0.75
+      min_speed_xy: 0.0
+      max_speed_xy: 0.5
+      min_speed_theta: 0.0
+
+      acc_lim_x: 0.5
+      acc_lim_y: 0.0
+      acc_lim_theta: 0.2
+      decel_lim_x: -0.5
+      decel_lim_theta: -0.2
+
+      vx_samples: 20
+      vy_samples: 1
+      vtheta_samples: 40
+
+      prune_plan: true
+      sim_time: 1.7
+      
+      critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
+
+      PathDist.scale: 12.0
+      PathAlign.scale: 4.0
+      
+      GoalDist.scale: 24.0
+      
+      BaseObstacle.scale: 0.05
+
+    general_goal_checker:
+      stateful: True
+      plugin: "nav2_controller::SimpleGoalChecker"
+      xy_goal_tolerance: 0.25
+      yaw_goal_tolerance: 0.25
+
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      update_frequency: 5.0
+      publish_frequency: 2.0
+      global_frame: husky/odom
+      robot_base_frame: husky/base_link
+      use_sim_time: true
+      transform_tolerance: 1.0
+      rolling_window: true
+      width: 10
+      height: 10
+      resolution: 0.05
+      footprint: "[[-0.5, -0.35], [-0.5, 0.35], [0.5, 0.35], [0.5, -0.35]]"
+      plugins: ["obstacle_layer", "inflation_layer"]
+
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: True
+        observation_sources: scan virtual_walls
+        
+        scan:
+          topic: /husky/sensors/lidar2d_0/scan
+          max_obstacle_height: 2.0
+          clearing: True
+          marking: True
+          data_type: "LaserScan"
+          raytrace_max_range: 5.0
+          obstacle_max_range: 4.5
+
+        virtual_walls:
+          topic: /virtual_corridor
+          data_type: "PointCloud2"
+          clearing: True
+          marking: True
+          min_obstacle_height: -0.5
+          max_obstacle_height: 0.5
+          raytrace_max_range: 6.0
+          obstacle_max_range: 5.5
+
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.15
